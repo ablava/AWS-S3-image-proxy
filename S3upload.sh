@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Script to upload images to S3
-# It can be scheduled to run every minute to upload new files only
+# Script to upload images to S3 and rename them to *.jpeg
+# It can be scheduled to run every minute to upload new *.jpg files
 # Replace [BUCKET] with your S3 bucket below
 
 myFunction() {
