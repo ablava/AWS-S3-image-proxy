@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Script to generate crude HTML pages as proof of concept
+# Script to generate crude HTML pages in "pages/" as proof of concept
 # Uses awscli utility to get the list of (yesterday's) images from S3
 # Replace [BUCKET] with your S3 bucket name
 
