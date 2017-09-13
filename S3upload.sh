@@ -2,6 +2,7 @@
 
 # Script to upload images to S3 and rename them to *.jpeg
 # It can be scheduled to run every minute to upload new *.jpg files
+# Uses awscli utility to connect to AWS S3 (needs separate configuration)
 # Replace [BUCKET] with your S3 bucket below
 
 myFunction() {
