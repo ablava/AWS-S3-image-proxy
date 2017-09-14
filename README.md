@@ -1,5 +1,3 @@
-# AWS-S3-image-proxy
-
 # Please read before you use this code
 
 Your use of this script constitutes an implicit agreement to use it at your own risk. Please read and understand the code fully before running it.
