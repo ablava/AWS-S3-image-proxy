@@ -21,11 +21,11 @@ aws s3 ls s3://[BUCKET]/images/$DATE/jpg/ --no-paginate | tr -s ' ' | cut -d ' '
 images=`wc -l images-$DATE.txt | cut -f1 -d' '`
 
 #decide how many pages of 6 thumbs to create
-pages_images=$(expr `wc -l images-$DATE.txt | cut -f1 -d' '` / 6)
+pages=$(expr `wc -l images-$DATE.txt | cut -f1 -d' '` / 6)
 
 # Need to add one more page if there is a division remainder
 if [ "$(expr `wc -l images-$DATE.txt | cut -f1 -d' '` % 6)" -ne "0" ]; then
-        pages_images=$(expr $pages_images + 1)
+        pages=$(expr $pages + 1)
 fi
 
 #start the $DATE.html page
@@ -36,13 +36,13 @@ image_pos=1
 
 # start outer loop for each subpage
 i=1
-while [ $i -le $pages_images ]; do
+while [ $i -le $pages ]; do
 
         # start the subpage
         outfile=pages/$DATE-$i.html
-        echo '<html><body><div style="text-align:center;float:left">Camera snaps for '$DATE' - page '$i' out of '$pages_images'<br>'>$outfile
+        echo '<html><body><div style="text-align:center;float:left">Camera snaps for '$DATE' - page '$i' out of '$pages'<br>'>$outfile
 
-        # start another counter and exit inner loop when it reaches 6 or the end of images
+        # exit inner loop when it reaches 6 iterations or the end of image listing
         j=0
         listofpics=''
         while read pic; do
@@ -55,7 +55,7 @@ while [ $i -le $pages_images ]; do
                 fi
                 
                 echo '<a href="'../s3images/images/$DATE/jpg/$pic'"'' target="_blank"''><img src="'../s3images/resize/462x260/images/$DATE/jpg/$pic'" width="462" height="260"border="1" style="padding-top:2px;padding-bottom:2px;padding-left:2px;padding-right:2px;margin-top:5px;margin-bottom:5px;margin-left:5px;margin-right:5px;"></a>'
-
+                # Remember all the pictures on this subpage
                 listofpics="$listofpics $pic"
         done <<< "$(cat images-$DATE.txt)" >>$outfile
 
@@ -63,7 +63,7 @@ while [ $i -le $pages_images ]; do
         let image_pos+=6
         echo '</div></body></html>'>>$outfile
 
-        #add the link for this new page to the index file for the date
+        # add the link for this new subpage to the index file for the date
         # include the list of images on that subpage (listofpics): 20170912-1.html: pic1, pic2
         echo '<a href="'$DATE-$i.html'">'$DATE-$i.html'</a>: '$listofpics'<br>' >> pages/$DATE.html
 
@@ -71,7 +71,7 @@ while [ $i -le $pages_images ]; do
         let i+=1
 done
 
-#close the $DATE.html page
+#close the $DATE.html page when done with all images
 echo '</body></html>' >> pages/$DATE.html
 
 # add the link for the date page to the index.html for the site
