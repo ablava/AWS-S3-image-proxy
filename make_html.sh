@@ -6,7 +6,8 @@
 
 # Define how many thumbs to show per page and the size
 imgsperpage=6
-size="462x260"
+width=462
+hight=260
 
 cd /usr/share/nginx/html
 
@@ -61,7 +62,7 @@ while [ $i -le $pages ]; do
                 fi
                 
                 # Place the thumbnail on the subpage
-                echo '<a href="'../s3images/images/$DATE/jpg/$pic'"'' target="_blank"''><img src="'../s3images/resize/$size/images/$DATE/jpg/$pic'" width="462" height="260"border="1" style="padding-top:2px;padding-bottom:2px;padding-left:2px;padding-right:2px;margin-top:5px;margin-bottom:5px;margin-left:5px;margin-right:5px;"></a>'
+                echo '<a href="'../s3images/images/$DATE/jpg/$pic'"'' target="_blank"''><img src="'../s3images/resize/$width'x'$hight/images/$DATE/jpg/$pic'" width="'$width'" height="'$hight'"border="1" style="padding-top:2px;padding-bottom:2px;padding-left:2px;padding-right:2px;margin-top:5px;margin-bottom:5px;margin-left:5px;margin-right:5px;"></a>'
 
                 # Remember all the pictures on this subpage
                 listofpics="$listofpics $pic"
