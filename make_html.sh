@@ -4,6 +4,10 @@
 # Uses awscli utility to get the list of (yesterday's) images from S3
 # Replace [BUCKET] with your S3 bucket name
 
+# Define how many thumbs to show per page and the size
+imgsperpage=6
+size="462x260"
+
 cd /usr/share/nginx/html
 
 # If date passed as an argument, e.g. 2017-09-12, use it, or set it to YESTERDAY
@@ -21,10 +25,10 @@ aws s3 ls s3://[BUCKET]/images/$DATE/jpg/ --no-paginate | tr -s ' ' | cut -d ' '
 images=`wc -l images-$DATE.txt | cut -f1 -d' '`
 
 # Decide how many pages of 6 thumbs to create
-pages=$(expr `wc -l images-$DATE.txt | cut -f1 -d' '` / 6)
+pages=$(expr `wc -l images-$DATE.txt | cut -f1 -d' '` / $imgsperpage)
 
 # Need to add one more page if there is a division remainder
-if [ "$(expr `wc -l images-$DATE.txt | cut -f1 -d' '` % 6)" -ne "0" ]; then
+if [ "$(expr `wc -l images-$DATE.txt | cut -f1 -d' '` % $imgsperpage)" -ne "0" ]; then
         pages=$(expr $pages + 1)
 fi
 
@@ -52,19 +56,19 @@ while [ $i -le $pages ]; do
                         continue
                 fi
                 # Stop when on the 6th image or at the end of the listing
-                if [ $j -ge $(($image_pos + 6)) ] || [ $j -gt $images ]; then
+                if [ $j -ge $(($image_pos + $imgsperpage)) ] || [ $j -gt $images ]; then
                         break
                 fi
                 
                 # Place the thumbnail on the subpage
-                echo '<a href="'../s3images/images/$DATE/jpg/$pic'"'' target="_blank"''><img src="'../s3images/resize/462x260/images/$DATE/jpg/$pic'" width="462" height="260"border="1" style="padding-top:2px;padding-bottom:2px;padding-left:2px;padding-right:2px;margin-top:5px;margin-bottom:5px;margin-left:5px;margin-right:5px;"></a>'
+                echo '<a href="'../s3images/images/$DATE/jpg/$pic'"'' target="_blank"''><img src="'../s3images/resize/$size/images/$DATE/jpg/$pic'" width="462" height="260"border="1" style="padding-top:2px;padding-bottom:2px;padding-left:2px;padding-right:2px;margin-top:5px;margin-bottom:5px;margin-left:5px;margin-right:5px;"></a>'
 
                 # Remember all the pictures on this subpage
                 listofpics="$listofpics $pic"
         done <<< "$(cat images-$DATE.txt)" >>$outfile
 
         # Advance the current image position by 6 and close the subpage
-        let image_pos+=6
+        let image_pos+=$imgsperpage
         echo '</div></body></html>'>>$outfile
 
         # Add the link for this new subpage to the index file for the date,
