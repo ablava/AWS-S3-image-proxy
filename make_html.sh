@@ -4,6 +4,8 @@
 # Uses awscli utility to get the list of (yesterday's) images from S3
 # Replace [BUCKET] with your S3 bucket name
 
+BUCKET=[BUCKET]
+
 # Define how many thumbs to show per page and the size
 imgsperpage=6
 width=462
@@ -20,7 +22,7 @@ if [ $# -eq 0 ]
 fi
 
 # Get the listing of images from S3 for that date
-aws s3 ls s3://[BUCKET]/images/$DATE/jpg/ --no-paginate | tr -s ' ' | cut -d ' ' -f4 > images-$DATE.txt
+aws s3 ls s3://$BUCKET/images/$DATE/jpg/ --no-paginate | tr -s ' ' | cut -d ' ' -f4 > images-$DATE.txt
 
 # Count the number of images
 images=`wc -l images-$DATE.txt | cut -f1 -d' '`
