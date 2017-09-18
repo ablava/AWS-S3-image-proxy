@@ -5,9 +5,11 @@
 # Uses awscli utility to connect to AWS S3 (needs separate configuration)
 # Replace [BUCKET] with your S3 bucket below
 
+BUCKET=[BUCKET]
+
 myFunction() {
     while read -r file; do
-    /usr/local/bin/aws s3 cp $file s3://[BUCKET]/images/`date +%Y-%m-%d`/jpg/
+    /usr/local/bin/aws s3 cp $file s3://$BUCKET/images/`date +%Y-%m-%d`/jpg/
     mv $file `echo $file|sed 's/\.jpg/\.jpeg/'`
     done
 }
