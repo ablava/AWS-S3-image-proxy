@@ -6,7 +6,7 @@
 
 read var1 var2 <<< $(/path/to/generate_signing_key.py -k [AWS SECRET KEY] -r [AWS-REGION])
 
-sed -i "s/\( *aws_signing_key *\).*/\1$var1; #Example L4vRLWAO92X5L3Sqk5QydUSdB0nC9+1wfqLMOKLbRp4=/" /etc/nginx/nginx.conf
+sed -i "s|\( *aws_signing_key *\).*|\1$var1; #Example L4vRLWAO92X5L3Sqk5QydUSdB0nC9+1wfqLMOKLbRp4=|" /etc/nginx/nginx.conf
 sed -i "s|\( *aws_key_scope *\).*|\1$var2; #Example 20150830\/us-east-1\/service\/aws4_request|" /etc/nginx/nginx.conf
 
 # Make nginx server re-read the config file
