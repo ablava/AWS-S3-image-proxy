@@ -87,5 +87,6 @@ echo '</body></html>' >> pages/$DATE.html
 
 # Add the link for the date page to the index.html for the site
 sed -i '$ d' index.html
+sed -i "/$DATE.html/d" index.html
 echo '<a href="pages/'$DATE.html'">'$DATE.html'</a><br>' >> index.html
 echo '</body></html>' >> index.html
